@@ -31,8 +31,33 @@ public class TopKFrequentElements {
         Assert.assertEquals(findTopFreqWithHeap(nums, k), expected);
     }
 
+    @Test
+    public void test4() {
+        int[] nums = {1, 1, 1, 2, 2, 3};
+        int k = 2;
+        int[] expected = {1, 2};
+        Assert.assertEquals(findTopFreqWithTreeMap(nums, k), expected);
+    }
 
-//    Runtime: 9 ms, faster than 86.78% of Java online submissions for Top K Frequent Elements.
+    private int[] findTopFreqWithTreeMap(int[] nums, int k) {
+        if (nums.length == 1) {
+            return nums;
+        }
+        int[] result = new int[k];
+        Map<Integer,Integer> freqMap = getFreqMap(nums);
+        TreeMap<Integer,Integer> treeMap = new TreeMap<>((o1, o2) -> o2 - o1);
+        for (Map.Entry<Integer, Integer> entry: freqMap.entrySet()) {
+            //swapping key and value, tree map is sorted by key
+            treeMap.put(entry.getValue(), entry.getKey());
+        }
+        for (int i = 0; i < k; i++) {
+            result[i] = treeMap.pollFirstEntry().getValue();
+        }
+        return result;
+    }
+
+
+    //    Runtime: 9 ms, faster than 86.78% of Java online submissions for Top K Frequent Elements.
 //    Memory Usage: 41.5 MB, less than 78.09% of Java online submissions for Top K Frequent Elements.
     private int[] findTopFreqWithHeap(int[] nums, int top) {
         if (nums.length == 1) {
